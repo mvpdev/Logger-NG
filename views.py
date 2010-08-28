@@ -7,15 +7,13 @@ Views for logger_ng
 '''
 
 import re
-from datetime import datetime, timedelta
-from time import sleep
 
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required, permission_required
 
 from rapidsms.webui.utils import render_to_response
-from django.http import HttpResponseRedirect
 
 from logger_ng.models import LoggedMessage
 from logger_ng.utils import respond_to_msg
@@ -31,23 +29,32 @@ def index(request):
 
     # If it is a POST then they are responding to a message.
     # Don't allow sending if the user doesn't have the can_respond permission
-    if request.method == 'POST' and \
+    if request.method == 'POST' and\
        request.user.has_perm('logger_ng.can_respond'):
-        for field, value in request.POST.iteritems():
-            match = re.match(r'^respond_(?P<id>\d+)$', field)
-            if match and len(value) > 1:
-                pk = match.groupdict()['id']
-                msg = get_object_or_404(LoggedMessage, pk=pk)
-                respond_to_msg(msg, value)
-        return redirect(index)
-
+       
+            for field, value in request.POST.iteritems():
+                match = re.match(r'^respond_(?P<id>\d+)$', field)
+                if match and len(value) > 1:
+                    pk = match.groupdict()['id']
+                    msg = get_object_or_404(LoggedMessage, pk=pk)
+                    respond_to_msg(msg, value)
+            return redirect(index)
+    
     # Don't exclude outgoing messages that are a response to another,
     # because they will be shown threaded beneath the original message
     msgs = LoggedMessage.objects.exclude(
                                     direction=LoggedMessage.DIRECTION_OUTGOING,
                                     response_to__isnull=False)
+                                    
+    # filter from form        
+    if request.method == 'GET':
+        search = request.GET['logger_ng_search_box']
+        msgs = msgs.filter(Q(identity__icontains=search) | \
+                           Q(text__icontains=search) | \
+                           Q(reporter__first_name__icontains=search) | \
+                           Q(reporter__last_name__icontains=search))
 
-    msgs.order_by('-date', 'direction')
+    msgs = msgs.order_by('-date', 'direction')
 
     paginator = Paginator(msgs, MESSAGES_PER_PAGE)
 
@@ -60,10 +67,12 @@ def index(request):
 
     # Try to set the paginator object to the correct page. Set it to the
     # last page if there is some problem with it (too high, etc...)
+    
     try:
         msgs = paginator.page(page)
     except (EmptyPage, InvalidPage):
         msgs = paginator.page(paginator.num_pages)
 
-    ctx = {'msgs': msgs}
+    ctx = locals()
+    ctx['request'] = request
     return render_to_response(request, "logger_ng/index.html", ctx)

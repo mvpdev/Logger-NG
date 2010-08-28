@@ -3,6 +3,12 @@ div.lng_msg {
     padding-top:2em;
 }
 
+div.lng_msg p {
+    text-align: center;
+    font-style:italic;
+}
+
+
 .lng_msg div.details {
     font-style:italic;
     padding-bottom:0.5em;
