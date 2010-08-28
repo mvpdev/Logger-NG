@@ -1,0 +1,55 @@
+
+div.lng_msg {
+    padding-top:2em;
+}
+
+.lng_msg div.details {
+    font-style:italic;
+    padding-bottom:0.5em;
+    margin-top: 2em;
+}
+
+.lng_msg div.msg {
+    font-family: Lekton;
+    background:#ededed;
+    margin-top:5px;
+    padding:1em;
+}
+
+.lng_msg div.msg.text {
+    background:#ededed url("/static/logger_ng/in.png") no-repeat 12px 12px;
+    border:solid 1px #ff0000;
+    padding-left:70px;
+}
+
+.lng_msg div.msg.response {
+    background:#ededed url("/static/logger_ng/out.png") no-repeat 12px 12px;
+    border:solid 1px #19b300;
+    padding-left:70px;
+}
+
+.msg, .respond {
+margin-left:1em;
+}
+
+.respond {
+text-align:right;
+margin-top:0.5em;
+}
+
+.respond .resp_box {
+width:612px;
+}
+
+.lng_page {
+text-align: right;
+margin: 2em 0;
+}
+
+.response span.date {
+font-style:italic;
+}
+
+#logger_ng_search {
+text-align:right;
+}
