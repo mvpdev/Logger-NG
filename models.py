@@ -120,7 +120,7 @@ class LoggedMessage(models.Model):
     identity = models.CharField(_(u"identity"), max_length=100)
     reporter = models.ForeignKey(Reporter, verbose_name=_(u"reporter"),
                                  blank=True, null=True)
-    status = models.CharField(_(u"status"), max_length=12,
+    status = models.CharField(_(u"status"), max_length=32,
                               choices=STATUS_CHOICES, blank=True, null=True)
 
     response_to = models.ForeignKey('self', verbose_name=_(u"response to"),
