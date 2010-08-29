@@ -23,7 +23,8 @@
     {% for msg in msgs.object_list %}
 
         <div class="details">
-            <span class="date">{{ msg.date|humanize_time_delta }}</span> from 
+            <span class="date">{{ msg.date|humanize_time_delta }}</span> 
+            {% if msg.is_incoming %} from {% else %} to {% endif %} 
             <span class="from">{{ msg.ident_string }}</span>
         </div>
         <div class="msg {% if msg.is_incoming %}text{% else %}response{% endif %}">

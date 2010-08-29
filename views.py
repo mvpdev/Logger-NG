@@ -48,7 +48,7 @@ def index(request):
                                     
     # filter from form        
     if request.method == 'GET':
-        search = request.GET['logger_ng_search_box']
+        search = request.GET.get('logger_ng_search_box', '')
         msgs = msgs.filter(Q(identity__icontains=search) | \
                            Q(text__icontains=search) | \
                            Q(reporter__first_name__icontains=search) | \
