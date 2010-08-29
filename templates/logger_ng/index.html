@@ -27,13 +27,13 @@
             <span class="from">{{ msg.ident_string }}</span>
         </div>
         <div class="msg {% if msg.is_incoming %}text{% else %}response{% endif %}">
-            {{ msg.text }}
+            {% if msg.text %}{{ msg.text }}{% else %}[Empty message]{% endif %}
         </div>
         
         {% for response in msg.response.all %}
             <div class="msg response">
             <span class="date">{{ response.date|humanize_time_delta }}:</span>
-            {{response.text}}
+            {% if response.text %}{{ response.text }}{% else %}[Empty message]{% endif %}
             </div>
         {% endfor %}
         
