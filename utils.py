@@ -6,11 +6,6 @@
 Helper utilities for logger_ng
 '''
 
-import urllib2
-from urllib import urlencode
-
-import rapidsms
-from rapidsms.webui import settings
 
 import config
 from models import LoggedMessage

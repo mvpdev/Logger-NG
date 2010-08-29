@@ -32,8 +32,7 @@ Conflicts:
     logger app
 
 Dependencies:
-    reporters app
-    ajax app
+    direct_sms
 '''
 
 import rapidsms
@@ -69,8 +68,6 @@ class App(rapidsms.app.App):
         '''
         This will be called when messages go out.
         '''
-        
-        print "logger_ng"
         
         msg = LoggedMessage.create_from_message(message)
         msg.direction = LoggedMessage.DIRECTION_OUTGOING
