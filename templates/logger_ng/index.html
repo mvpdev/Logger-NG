@@ -1,21 +1,24 @@
-{% extends base_template %}
-{% block title %}Message Log{% endblock %}
+{% extends "layout.html" %}
+{% block title %}Message Log - {{ block.super }}{% endblock %}
 
 {% block javascripts %}
 {% endblock %}
 
 {% load logger_ng_format %}
+{% load forms_tags %}
 
-{% block page_stylesheets %}
-    <link rel="stylesheet" href="/static/logger_ng/css/blueprint/screen.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/static/logger_ng/css/style.css" />
+{% block stylesheets %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ MEDIA_URL }}logger_ng/stylesheets/blueprint/screen.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}logger_ng/stylesheets/style.css" />
 {% endblock %}
 
 {% block content %}
 
 <div class="lng_msg span-18 last prepend-2">
 
-    <form action="/logger_ng" method="get" id="logger_ng_search">
+    <form action="." method="get" id="logger_ng_search">
+        {% csrf_token %}
         <input id="logger_ng_search_box" name="logger_ng_search_box" type="text" value="{{ request.GET.logger_ng_search_box }}" />
         <input type="submit" value="Filter messages" />
     </form>
@@ -39,7 +42,8 @@
         {% endfor %}
         
         {% if perms.logger_ng.respond and msg.is_incoming %}
-            <div class="respond"><form action="/logger_ng" method="post">
+            <div class="respond"><form action="." method="post">
+                {% csrf_token %}
                 <input class="resp_box" name="respond_{{ msg.id }}" type="text" maxlength="140"/>
                 <input type="submit" value="Respond" />
             </form></div>    

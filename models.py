@@ -10,7 +10,7 @@ IncomingManager
 from django.db import models
 from django.utils.translation import ugettext as _
 
-from reporters.models import Reporter, PersistantConnection
+from rapidsms.models import Contact, Connection
 
 
 class OutgoingManager(models.Manager):
@@ -41,9 +41,9 @@ class LoggedMessage(models.Model):
         date        - date of the message
         direction   - DIRECTION_INCOMING or DIRECTION_OUTGOING
         text        - text of the message
-        backend     - the backend slug of the message backend (a string)
+        backend     - the backend name of the message backend (a string)
         identity    - identity (ie. phone number) of the message (a string)
-        reporter    - foreign key to Reporter from the reporters app
+        contact     - foreign key to contact from rapidsms
         status      - stores message status, (success, error, parse_error, etc)
         response_to - recursive foreignkey to self. Only used for outgoing
                       messages. Points to the LoggedMessage to which the
@@ -119,7 +119,7 @@ class LoggedMessage(models.Model):
     text = models.TextField(_(u"text"))
     backend = models.CharField(_(u"backend"), max_length=75)
     identity = models.CharField(_(u"identity"), max_length=100)
-    reporter = models.ForeignKey(Reporter, verbose_name=_(u"reporter"),
+    contact = models.ForeignKey(Contact, verbose_name=_(u"contact"),
                                  blank=True, null=True)
     status = models.CharField(_(u"status"), max_length=32,
                               choices=STATUS_CHOICES, blank=True, null=True)
@@ -143,26 +143,23 @@ class LoggedMessage(models.Model):
     def ident_string(self):
         '''
         Returns a string for the message identity.
-        If there is no reporter, it will just return something like:
+        If there is no contact, it will just return something like:
             dataentry 1234
 
-        If there is a reporter, but no location it will return:
+        If there is a contact, but no location it will return:
             dataentry 1234 (John Doe)
 
-        If there is a reporter and a location it will return:
+        If there is a contact and a location it will return:
             dataentry 1234 (John Doe from New York)
         '''
-        string = u"%(backend)s %(identity)s" % \
-                 {'backend': self.backend, 'identity': self.identity}
+        string = u"%(backend)s %(identity)s" % {'backend': self.backend, 
+                                                'identity': self.identity}
 
-        if self.reporter:
-            reporter_string = self.reporter.full_name()
-            if self.reporter.location:
-                reporter_string = _(u"%(reporter)s from %(location)s") % \
-                                  {'reporter': reporter_string,
-                                   'location': self.reporter.location.name}
-            string = u"%(current)s (%(reporter)s)" % \
-                     {'current': string, 'reporter': reporter_string}
+        if self.contact:
+
+            string = u"%(current)s (%(contact)s)" % {'current': string, 
+                                                     'contact': contact_string}
+                     
         return string
 
 
@@ -174,8 +171,8 @@ class LoggedMessage(models.Model):
 
 
     def __unicode__(self):
-        return  u"%(direction)s - %(ident)s - %(text)s" % \
-                 {'direction': self.get_direction_display(),
+        return  u"%(direction)s - %(ident)s - %(text)s" % {
+                  'direction': self.get_direction_display(),
                   'ident': self.ident_string(),
                   'text': self.text}
 
@@ -187,27 +184,26 @@ class LoggedMessage(models.Model):
         object from it.  You _must_ set the direction of the LoggedMessage, as
         we can't tell from the message object if it is incoming or outgoing.
 
-        It will try to check to see if a reporter exists for this message,
-        and if one does, it will set the reporter foreign key of the
-        LoggedMessage object to that reporter. We can't just use
-        message.connection.reporter because that doesn't exist until the
-        reporters app has handled the message, and we assume we want the
+        It will try to check to see if a contact exists for this message,
+        and if one does, it will set the contact foreign key of the
+        LoggedMessage object to that contact. We can't just use
+        message.connection.contact because that doesn't exist until the
+        contacts app has handled the message, and we assume we want the
         logger_ng app to be the _first_ app in our local.ini.
         '''
-        backend_slug = message.connection.backend.slug
+        backend_name = message.connection.backend.name
         identity = message.connection.identity
         try:
-            reporter = PersistantConnection \
-                                .objects.get(backend__slug=backend_slug,
-                                             identity=identity).reporter
-        except PersistantConnection.DoesNotExist:
-            reporter = None
+            contact = Connection.objects.get(backend__name=backend_name,
+                                             identity=identity).contact
+        except Connection.DoesNotExist:
+            contact = None
 
         msg = LoggedMessage(text=message.text,
-                            backend=backend_slug,
+                            backend=backend_name,
                             identity=identity,
-                            reporter=reporter,
-                            status=message.status)
+                            contact=contact,
+                            status=getattr('message', 'status', None))
         return msg
 
 

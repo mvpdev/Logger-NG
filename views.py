@@ -9,11 +9,10 @@ Views for logger_ng
 import re
 
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required, permission_required
-
-from rapidsms.webui.utils import render_to_response
+from django.template import RequestContext
 
 from logger_ng.models import LoggedMessage
 from logger_ng.utils import respond_to_msg
@@ -51,8 +50,7 @@ def index(request):
         search = request.GET.get('logger_ng_search_box', '')
         msgs = msgs.filter(Q(identity__icontains=search) | \
                            Q(text__icontains=search) | \
-                           Q(reporter__first_name__icontains=search) | \
-                           Q(reporter__last_name__icontains=search))
+                           Q(contact__name__icontains=search))
 
     msgs = msgs.order_by('-date', 'direction')
 
@@ -74,5 +72,5 @@ def index(request):
         msgs = paginator.page(paginator.num_pages)
 
     ctx = locals()
-    ctx['request'] = request
-    return render_to_response(request, "logger_ng/index.html", ctx)
+    return render_to_response("logger_ng/index.html", ctx,
+                              context_instance=RequestContext(request))

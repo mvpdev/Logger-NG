@@ -23,13 +23,13 @@ div.lng_msg p {
 }
 
 .lng_msg div.msg.text {
-    background:#ededed url("/static/logger_ng/in.png") no-repeat 12px 12px;
+    background:#ededed url("../in.png") no-repeat 12px 12px;
     border:solid 1px #ff0000;
     padding-left:70px;
 }
 
 .lng_msg div.msg.response {
-    background:#ededed url("/static/logger_ng/out.png") no-repeat 12px 12px;
+    background:#ededed url("../out.png") no-repeat 12px 12px;
     border:solid 1px #19b300;
     padding-left:70px;
 }

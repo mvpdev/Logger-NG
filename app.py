@@ -5,21 +5,20 @@
 '''
 logger_ng is an enhanced replacement for the original rapidsms logger
 
-It should be included as the first app in your local.ini file. It performs
-a number of functions:
+It performs a number of functions:
     - Store a LoggedMessage object for every incoming and outgoing message.
     - Inject a logger_id watermark into the rapidsms Message object as
       it passes through.
     - Associate outgoing messages to their soliciting incoming message when
       Message.respond is used by an app.
-    - Look-up a message's reporter and store it with the LoggedMessage
+    - Look-up a message's cotnact and store it with the LoggedMessage
     - Store the message.status (CharField) along with the message.
     - Provide a convenient web interface to view the message log
     - Allow users to respond to messages from the web interface
     - Imports from the original logger app
 
-logger_ng does not play well with logger. To switch from using the original
-logger app, to logger_ng, simply edit your local.ini and change logger
+logger_ng does not play well with messagelog. To switch from using the original
+logger app, to logger_ng, simply edit your settings.py and change logger
 in your apps list to logger_ng.
 Then create the logger_ng table by running ./rapidsms syncdb
 Import your old logs from logger by running ./rapidsms import_from_logger
@@ -32,27 +31,24 @@ Conflicts:
     logger app
 
 Dependencies:
-    reporters app
-    ajax app
+    direct_sms
 '''
 
-import rapidsms
+from rapidsms.apps.base import AppBase
 
 from models import LoggedMessage
 
 
-class App(rapidsms.app.App):
+class App(AppBase):
     '''
     Main app, extending rapidsms.app.App
 
     Overrides the handle and outgoing methods
     '''
 
-    def handle(self, message):
+    def parse(self, message):
         '''
-        This will be called when messages come in. We don't return return
-        anything, so as far as rapidsms is concerned, we haven't handled it
-        so it just keeps passing it along to the latter apps.
+        This will be called when messages come in. 
         '''
         msg = LoggedMessage.create_from_message(message)
         msg.direction = LoggedMessage.DIRECTION_INCOMING
@@ -63,14 +59,12 @@ class App(rapidsms.app.App):
 
         # Print message if debug
         self.debug(msg)
-
+        
 
     def outgoing(self, message):
         '''
         This will be called when messages go out.
         '''
-        
-        print "logger_ng"
         
         msg = LoggedMessage.create_from_message(message)
         msg.direction = LoggedMessage.DIRECTION_OUTGOING

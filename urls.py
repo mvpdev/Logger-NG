@@ -10,5 +10,7 @@ from django.conf.urls.defaults import *
 import logger_ng.views as views
 
 urlpatterns = patterns('',
-    url(r'^logger_ng/?$', views.index),
+    url(r'^logger_ng/$', views.index, name='logger_ng'),
 )
+
+
