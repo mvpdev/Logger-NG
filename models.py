@@ -191,16 +191,11 @@ class LoggedMessage(models.Model):
         '''
         backend_name = message.connection.backend.name
         identity = message.connection.identity
-        try:
-            contact = Connection.objects.get(backend__name=backend_name,
-                                             identity=identity).contact
-        except Connection.DoesNotExist:
-            contact = None
 
         msg = LoggedMessage(text=message.text,
                             backend=backend_name,
                             identity=identity,
-                            contact=contact,
+                            contact=message.contact,
                             status=getattr('message', 'status', None))
         return msg
 
