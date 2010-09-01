@@ -149,8 +149,6 @@ class LoggedMessage(models.Model):
         If there is a contact, but no location it will return:
             dataentry 1234 (John Doe)
 
-        If there is a contact and a location it will return:
-            dataentry 1234 (John Doe from New York)
         '''
         string = u"%(backend)s %(identity)s" % {'backend': self.backend, 
                                                 'identity': self.identity}
@@ -158,7 +156,7 @@ class LoggedMessage(models.Model):
         if self.contact:
 
             string = u"%(current)s (%(contact)s)" % {'current': string, 
-                                                     'contact': contact_string}
+                                                     'contact': self.contact}
                      
         return string
 
