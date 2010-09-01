@@ -12,12 +12,14 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
 
 from logger_ng.models import LoggedMessage
 from logger_ng.utils import respond_to_msg
 
 
+@csrf_protect
 @login_required
 @permission_required('logger_ng.can_view')
 def index(request):
