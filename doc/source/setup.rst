@@ -2,13 +2,16 @@
 Setup
 ******
 
-#. Copy / paste the entire logger_ng folder to the ./apps directory of your project.
+#. Copy / paste the entire logger_ng folder in a directory on you Python Path
 
-#. Add 'logger_ng' **at the begining** of the app list in your *.ini file.
+#. Add 'logger_ng' in INSTALLED_APPS.
 
-#. If you already used 'logger' on this project, remove the 'logger' app 
-   (as they are not compatible)
-   from your *.ini file and run ``./rapidsms import_from_logger`` to update to
-   import the old logs 
+# Add a tab in RAPIDSMS_TABS, something like ("logger_ng.views.index", "New Message Log"),
+
+#. ./manage.py syncdb
+
+#. If you already used 'messagelog' on this project, you can run 
+   ``./rapidsms import_from_logger`` import the old logs then you can remove the 
+   olg app
 
 .. note:: ``./rapidsms import_from_logger`` doesn't delete the old logs.

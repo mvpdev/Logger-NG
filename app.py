@@ -17,9 +17,9 @@ It performs a number of functions:
     - Allow users to respond to messages from the web interface
     - Imports from the original logger app
 
-logger_ng does not play well with messagelog. To switch from using the original
-logger app, to logger_ng, simply edit your settings.py and change logger
-in your apps list to logger_ng.
+To switch from using the original
+logger app, to logger_ng, simply edit your settings.py and add logger_ng to
+your INSTALLED_APP and your RAPIDSMS_TABS
 Then create the logger_ng table by running ./rapidsms syncdb
 Import your old logs from logger by running ./rapidsms import_from_logger
 
