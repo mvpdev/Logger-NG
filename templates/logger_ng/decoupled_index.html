@@ -1,21 +1,3 @@
-{% extends "layout.html" %}
-
-{% load logger_ng_format %}
-{% load forms_tags %}
-{% load i18n %}
-
-{% block title %}{% trans "Message Log" %} - {{ block.super }}{% endblock %}
-
-{% block javascripts %}
-{% endblock %}
-
-
-{% block stylesheets %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{{ MEDIA_URL }}logger_ng/stylesheets/blueprint/screen.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}logger_ng/stylesheets/style.css" />
-{% endblock %}
-
 {% block content %}
 
 <div class="lng_msg span-18 last prepend-2">

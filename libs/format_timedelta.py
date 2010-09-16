@@ -2,11 +2,12 @@
 # -*- coding= UTF-8 -*-
 
 import datetime
+from django.utils.translation import ugettext as _
 
 def humanize_timedelta(previous_date,
                        max_days=3,
                        datetime_format='%m/%d/%Y',
-                       suffix=' ago'):
+                       suffix=' ago', prefix=''):
     """
     Returns a humanized string representing a fuzzy time difference
     between the current date and the passed date.
@@ -43,23 +44,24 @@ def humanize_timedelta(previous_date,
     today = datetime.datetime.now()
     delta = today - previous_date
     time_values = (
-        (u"day", delta.days),
-        (u"hour", delta.seconds / 3600),
-        (u"minute", delta.seconds % 3600 / 60),
-        (u"second", delta.seconds % 3600 % 60),
+        (_(u"day"), delta.days),
+        (_(u"hour"), delta.seconds / 3600),
+        (_(u"minute"), delta.seconds % 3600 / 60),
+        (_(u"second"), delta.seconds % 3600 % 60),
     )
 
     if time_values[0][1] > max_days:
         return previous_date.strftime(datetime_format)
 
     if (today.date() - previous_date.date()).days == 1:
-        return u"yesterday"
+        return _(u"yesterday")
 
     for tStr, value in time_values:
         if value > 0:
-            return u"%s %s%s" % (value,
-                                 tStr if value == 1 else tStr + u"s",
-                                 suffix)
+            return u"%s%s %s%s" % (prefix,
+                                   value,
+                                   tStr if value == 1 else tStr + u"s",
+                                   suffix)
 
-    return u"0 second " + suffix
+    return prefix + _(u"0 second ") + suffix
 

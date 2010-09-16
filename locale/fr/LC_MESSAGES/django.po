@@ -1,0 +1,230 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-09-16 10:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n>1;\n"
+
+#: models.py:65
+msgid "logged message"
+msgstr "Message enregistré"
+
+#: models.py:66
+msgid "logged messages"
+msgstr "Messages enregistrés"
+
+#: models.py:69
+msgid "Can view"
+msgstr "Peut consulter"
+
+#: models.py:70
+msgid "Can respond"
+msgstr "Peut répondre"
+
+#: models.py:78
+msgid "Incoming"
+msgstr "Entrant"
+
+#: models.py:79
+msgid "Outgoing"
+msgstr "Sortant"
+
+#: models.py:100
+msgid "Success"
+msgstr "Réussi"
+
+#: models.py:101
+msgid "Warning"
+msgstr "Attention"
+
+#: models.py:102
+msgid "Error"
+msgstr "Erreur"
+
+#: models.py:103
+msgid "Info"
+msgstr "Info"
+
+#: models.py:104
+msgid "Alert"
+msgstr "Alerte"
+
+#: models.py:105
+msgid "Reminder"
+msgstr "Rappel"
+
+#: models.py:106
+msgid "Response from logger"
+msgstr "Reponse du logger"
+
+#: models.py:107
+msgid "System error"
+msgstr "Erreur Système"
+
+#: models.py:109
+msgid "Mixed"
+msgstr "Mixte"
+
+#: models.py:110
+msgid "Parse Error"
+msgstr "Erreur d'analyse"
+
+#: models.py:111
+msgid "Bad Value"
+msgstr "Valeur incorrecte"
+
+#: models.py:112
+msgid "Inapplicable"
+msgstr "Inapplicable"
+
+#: models.py:113
+msgid "Not Allowed"
+msgstr "Non autorisé"
+
+#: models.py:115
+msgid "date"
+msgstr "date"
+
+#: models.py:116
+msgid "type"
+msgstr "type"
+
+#: models.py:119
+msgid "text"
+msgstr "texte"
+
+#: models.py:120
+msgid "backend"
+msgstr "backend"
+
+#: models.py:121
+msgid "identity"
+msgstr "indentité"
+
+#: models.py:122
+msgid "contact"
+msgstr "contact"
+
+#: models.py:124
+msgid "status"
+msgstr "status"
+
+#: models.py:127
+msgid "response to"
+msgstr "reponse à"
+
+#: libs/format_timedelta.py:47
+msgid "day"
+msgstr "jour"
+
+#: libs/format_timedelta.py:48
+msgid "hour"
+msgstr "heure"
+
+#: libs/format_timedelta.py:49
+msgid "minute"
+msgstr "minute"
+
+#: libs/format_timedelta.py:50
+msgid "second"
+msgstr "second"
+
+#: libs/format_timedelta.py:57
+msgid "yesterday"
+msgstr "hier"
+
+#: libs/format_timedelta.py:66
+msgid "0 second "
+msgstr "0 seconde"
+
+#: management/commands/import_from_logger.py:78
+msgid "There are no messages in the logger app to import."
+msgstr "Il n'y a pas de message de l'application 'logger' à importer"
+
+#: management/commands/import_from_logger.py:96
+msgid "It appears that you have already imported your messages."
+msgstr "Il semble que vous avez déjà importé vos messages"
+
+#: management/commands/import_from_logger.py:99
+#, python-format
+msgid "The message %s doesn't have a connection."
+msgstr "Le message %s n'a pas de connection."
+
+#: management/commands/import_from_logger.py:101
+#, python-format
+msgid "Importing %d incoming messages..."
+msgstr "Importation de %d messages entrant..."
+
+#: management/commands/import_from_logger.py:108
+#, python-format
+msgid "Importing %d outgoing messages..."
+msgstr "Importation de %d messages sortant..."
+
+#: management/commands/import_from_logger.py:134
+#, python-format
+msgid "%d outgoing messages paired with their incoming messages."
+msgstr ""
+"%d messages sortant ont été reliés à leur message entrant correspondant"
+
+#: management/commands/import_from_logger.py:137
+msgid "Importing complete."
+msgstr "Importation terminée"
+
+#: templates/logger_ng/index.html:7
+msgid "Message Log"
+msgstr "Log des messages"
+
+#: templates/logger_ng/index.html:26
+#, fuzzy
+msgid "Filter messages"
+msgstr "Filtrer les message"
+
+#: templates/logger_ng/index.html:33
+msgid "from"
+msgstr "en provenance de"
+
+#: templates/logger_ng/index.html:33
+msgid "to"
+msgstr "à destination de"
+
+#: templates/logger_ng/index.html:51
+#, fuzzy
+msgid "Respond"
+msgstr "Répondre"
+
+#: templates/logger_ng/index.html:56
+#, fuzzy
+msgid "No message found"
+msgstr "Message enregistré"
+
+#: templates/logger_ng/index.html:64
+msgid "Previous"
+msgstr "Précédent"
+
+#: templates/logger_ng/index.html:67
+#, python-format
+msgid ""
+"\n"
+"                Page %(number)s of %(num_pages)s\n"
+"            "
+msgstr ""
+"\n"
+"                Page %(number)s sur %(num_pages)s\n"
+"            "
+
+#: templates/logger_ng/index.html:72
+#, fuzzy
+msgid "Next"
+msgstr "Suivant"

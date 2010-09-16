@@ -22,7 +22,7 @@ from logger_ng.utils import respond_to_msg
 @csrf_protect
 @login_required
 @permission_required('logger_ng.can_view')
-def index(request):
+def index(request, template='logger_ng/index.html'):
     '''
     Index view
     '''
@@ -74,5 +74,5 @@ def index(request):
         msgs = paginator.page(paginator.num_pages)
 
     ctx = locals()
-    return render_to_response("logger_ng/index.html", ctx,
+    return render_to_response(template, ctx,
                               context_instance=RequestContext(request))

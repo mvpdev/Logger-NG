@@ -1,3 +1,8 @@
 *.pyc
 build
 *.orig
+~*
+*.mo
+*.db
+*.sqlite*
+*.log.*
