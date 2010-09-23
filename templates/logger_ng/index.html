@@ -48,7 +48,7 @@
             <div class="respond"><form action="." method="post">
                 {% csrf_token %}
                 <input class="resp_box" name="respond_{{ msg.id }}" type="text" maxlength="140"/>
-                <input type="submit" value='{% trans "Respond" %}' />
+                <input type="submit" value="{% blocktrans %}Respond{% endblocktrans %}" />
             </form></div>    
         {% endif %}
         
