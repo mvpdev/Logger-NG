@@ -184,7 +184,6 @@ msgstr "Importation terminée"
 
 #: templates/logger_ng/decoupled_index.html:8
 #: templates/logger_ng/index.html:26
-#, fuzzy
 msgid "Filter messages"
 msgstr "Filtrer les message"
 
@@ -200,13 +199,11 @@ msgstr "à destination de"
 
 #: templates/logger_ng/decoupled_index.html:33
 #: templates/logger_ng/index.html:51
-#, fuzzy
 msgid "Respond"
 msgstr "Répondre"
 
 #: templates/logger_ng/decoupled_index.html:38
 #: templates/logger_ng/index.html:56
-#, fuzzy
 msgid "No message found"
 msgstr "Aucun message trouvé"
 
