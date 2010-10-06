@@ -1,0 +1,111 @@
+table.full {
+  width: 100%; }
+
+table.msgs {
+  width: 100%; }
+  table.msgs col.status, table.msgs td.status {
+    width: 20px; }
+  table.msgs col.l, table.msgs td.l {
+    width: 100px; }
+  table.msgs col.name, table.msgs td.name {
+    width: 120px; }
+  table.msgs col.date, table.msgs td.date {
+    text-align: right;
+    width: 120px; }
+  table.msgs span.replycount {
+    font-size: smaller; }
+  table.msgs tr td, table.msgs tr.expanded-msg tr.bold td {
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none; }
+  table.msgs tr.expanded-msg td {
+    cursor: default;
+    -moz-user-select: text;
+    -webkit-user-select: text; }
+  table.msgs div.status {
+    width: 18px;
+    height: 18px;
+    background-image: url("../icons/dots.png");
+    background-position: center top; }
+    table.msgs div.status.good {
+      background-position: 0 54px; }
+    table.msgs div.status.pending {
+      background-position: 0 0; }
+    table.msgs div.status.warning {
+      background-position: 0 18px; }
+    table.msgs div.status.info {
+      background-position: 0 36px; }
+    table.msgs div.status.error {
+      background-position: 0 18px; }
+  table.msgs tr.hidden, table.msgs tr.hidden-open {
+    display: none; }
+  table.msgs td.featured_message {
+    padding: 0; }
+    table.msgs td.featured_message div.w, table.msgs td.featured_message div.response_box {
+      -moz-border-radius-bottomleft: 4px;
+      -moz-border-radius-bottomright: 4px;
+      -webkit-border-bottom-left-radius: 4px;
+      -webkit-border-bottom-right-radius: 4px; }
+    table.msgs td.featured_message div.w {
+      border: 1px solid #dddddd;
+      border-width: 0 1px 1px 1px; }
+    table.msgs td.featured_message div.w {
+      margin: 0 0 5px 0; }
+      table.msgs td.featured_message div.w div.response_box {
+        background-color: #efefef;
+        padding: 4px;
+        position: relative; }
+        table.msgs td.featured_message div.w div.response_box textarea {
+          color: #666666;
+          font-size: 14px;
+          font-family: Arial;
+          padding: 2px 4px; }
+        table.msgs td.featured_message div.w div.response_box table {
+          margin-left: 36px; }
+          table.msgs td.featured_message div.w div.response_box table td {
+            border: 0 none; }
+        table.msgs td.featured_message div.w div.response_box .chars, table.msgs td.featured_message div.w div.response_box a.send {
+          display: block;
+          text-align: center;
+          -moz-user-select: none;
+          -webkit-user-select: none; }
+        table.msgs td.featured_message div.w div.response_box .chars {
+          height: 16px;
+          font-weight: bold;
+          font-size: 16px;
+          color: #888888; }
+          table.msgs td.featured_message div.w div.response_box .chars.negative {
+            color: #af5656; }
+        table.msgs td.featured_message div.w div.response_box a.send {
+          margin: 2px;
+          -moz-border-radius: 3px;
+          background-color: white;
+          border: 1px solid #999999;
+          padding: 5px 12px;
+          text-decoration: none;
+          border-color: #dddddd #cccccc #cccccc #dddddd;
+          color: #333333;
+          display: block;
+          text-align: center; }
+      table.msgs td.featured_message div.w ul.response_list {
+        list-style-position: outside;
+        margin: 0;
+        padding: 0 0 0 80px; }
+        table.msgs td.featured_message div.w ul.response_list li {
+          list-style-image: url("../icons/larrow.png");
+          padding: 6px 218px 6px 87px; }
+        table.msgs td.featured_message div.w ul.response_list li.pending {
+          list-style-image: url("../icons/alert.png"); }
+  table.msgs table.original {
+    margin: 0 0 0 -1px;
+    width: 100%; }
+    table.msgs table.original tr.bold td {
+      font-weight: bold; }
+    table.msgs table.original div.response_box {
+      background-color: #efefef;
+      padding: 4px; }
+
+br.cb {
+  clear: both; }
+table.lng_page td {
+	border:0 none; }

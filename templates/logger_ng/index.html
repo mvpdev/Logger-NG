@@ -2,67 +2,106 @@
 {% block title %}Message Log{% endblock %}
 
 {% block javascripts %}
+<script type="text/javascript" src="/static/logger_ng/js/jquery.buildin.js"></script>
+<script type="text/javascript" src="/static/logger_ng/js/logger_reply.js"></script>
+<script type="text/javascript" src="/static/logger_ng/js/jquery.buildin.templates.js"></script>
 {% endblock %}
 
-{% load logger_ng_format %}
 
 {% block page_stylesheets %}
-    <link rel="stylesheet" href="/static/logger_ng/css/blueprint/screen.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/static/logger_ng/css/style.css" />
+<link rel="stylesheet" type="text/css" href="/static/logger_ng/css/sms-replies.css" />
+<link rel="stylesheet" type="text/css" href="/static/logger_ng/style.css" />
 {% endblock %}
 
 {% block content %}
 
-<div class="lng_msg span-18 last prepend-2">
 
-    <form action="/logger_ng" method="get" id="logger_ng_search">
-        <input id="logger_ng_search_box" name="logger_ng_search_box" type="text" value="{{ request.GET.logger_ng_search_box }}" />
-        <input type="submit" value="Filter messages" />
-    </form>
-    
-    {% for msg in msgs.object_list %}
-
-        <div class="details">
-            <span class="date">{{ msg.date|humanize_time_delta }}</span> 
-            {% if msg.is_incoming %} from {% else %} to {% endif %} 
-            <span class="from">{{ msg.ident_string }}</span>
-        </div>
-        <div class="msg {% if msg.is_incoming %}text{% else %}response{% endif %}">
-            {% if msg.text %}{{ msg.text }}{% else %}[Empty message]{% endif %}
-        </div>
-        
-        {% for response in msg.response.all %}
-            <div class="msg response">
-            <span class="date">{{ response.date|humanize_time_delta }}:</span>
-            {% if response.text %}{{ response.text }}{% else %}[Empty message]{% endif %}
-            </div>
-        {% endfor %}
-        
-        {% if perms.logger_ng.respond and msg.is_incoming %}
-            <div class="respond"><form action="/logger_ng" method="post">
-                <input class="resp_box" name="respond_{{ msg.id }}" type="text" maxlength="140"/>
-                <input type="submit" value="Respond" />
-            </form></div>    
-        {% endif %}
-        
-    {% empty %}
-        <p>No message found<p>    
+{% for msg in msgs.object_list %}
+<div class="lng_msg">
+    <div class="details">
+        <span class="date">{{msg.date|date:"d-M-Y @ H:m:s"}}</span>
+        <span class="from">{{msg.ident_string}}</span>
+		<span class="status" title="{{'good'}}"></span>
+    </div>
+    <div class="msg {% if msg.is_incoming %}text{% else %}response{% endif %}">{{msg.text}}</div>
+    {% for response in msg.response.all %}
+        <div class="msg response">{{response.text}}</div>
     {% endfor %}
-
+    {% if perms.logger_ng.respond and msg.is_incoming %}
+        <div class="respond"><form action="" method="post">
+            <input class="resp_box" name="respond_{{msg.id}}" type="text" />
+            <input type="submit" value="Respond" />
+        </form></div>    
+    {% endif %}
 </div>
+{% endfor %}
 
-<div class="lng_page span-18 last prepend-2">
-<span>
+<script type="text/javascript">
+	var CurrentLang = (window.navigator.language.toLowerCase()=="en-us") ? "en" : "fr",
+		ExchangeSettings = {
+		'token' : "qwertyuiopasdfghjklzxcvbnm",
+		'msgPOSTurl' : "logger_ng/proxypost"
+		},
+		Translations;
+
+	// window.navigator.language is not reliable in all browsers, but
+	// might be good for surprising kevin+renaud with a french ui
+	CurrentLang = (window.navigator.language.toLowerCase()=="en-us") ? "en" : "fr";
+	
+	Translations = {
+		'en': {
+			'response': "Response",
+			'responses': "Responses",
+			'reply': 'Respond',
+			'status': {
+				'good': "Status: Good",
+				'warning': "Status: Warning",
+				'pending': "Status: Pending",
+				'error': "Status: Error",
+				'info': "Status: Info"
+			},
+			'sendMessage': "Send",
+			'tooManyCharacters': "Too many characters"
+		},
+		'fr': {
+			'response': "Réponse",
+			'responses': "Réponses",
+			'reply': "Répondre",
+			'status': {
+				'good': "Statut: Bon",
+				'pending': "Statut: Pending",
+				'warning': "Statut: Warning",
+				'error': "Statut: Error",
+				'info' : "Statut: Info"
+			},
+			'sendMessage': "Envoyer",
+			'tooManyCharacters': "Too many characters (in French)"
+		}
+	};
+	
+	(function(){
+		//creates the wrapping table with class msgs
+		var tableWrap = $("<table class='msgs'></table>");
+		
+		//creates exchange object and inserts it into tableWrap
+		$('.lng_msg').enableSmsExchangeIn(tableWrap);
+		
+		//inserts tableWrap just before the first '.lng_msg'
+		$($('.lng_msg').get(0)).before(tableWrap);
+	})();
+</script>
+<table class="lng_page">
+<tr><td>
         {% if msgs.has_previous %}
-            <a href="?page={{ msgs.previous_page_number }}&amp;logger_ng_search_box={{ request.GET.logger_ng_search_box }}">&lt; Previous </a>
+            <a href="?page={{ msgs.previous_page_number }}">Previous</a>
         {% endif %}
-</span>
+</td><td>
             Page {{ msgs.number }} of {{ msgs.paginator.num_pages }}
-<span>
+</td><td>
         {% if msgs.has_next %}
-            <a href="?page={{ msgs.next_page_number }}&amp;logger_ng_search_box={{ request.GET.logger_ng_search_box }}"> Next &gt;</a>
+            <a href="?page={{ msgs.next_page_number }}">Next</a>
         {% endif %}
-</span>
-</div>
+</td></tr>
+</table>
 
 {% endblock %}
