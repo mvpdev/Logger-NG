@@ -32,13 +32,13 @@ def index(request):
     if request.method == 'POST' and\
        request.user.has_perm('logger_ng.can_respond'):
        
-            for field, value in request.POST.iteritems():
-                match = re.match(r'^respond_(?P<id>\d+)$', field)
-                if match and len(value) > 1:
-                    pk = match.groupdict()['id']
-                    msg = get_object_or_404(LoggedMessage, pk=pk)
-                    respond_to_msg(msg, value)
-            return redirect(index)
+        for field, value in request.POST.iteritems():
+            match = re.match(r'^respond_(?P<id>\d+)$', field)
+            if match and len(value) > 1:
+                pk = match.groupdict()['id']
+                msg = get_object_or_404(LoggedMessage, pk=pk)
+                return HttpResponse(serializers.serialize('json', {'msg':msg, 'id':id, 'status':'good'}), mimetype="text/plain")
+        return HttpResponse(serializers.serialize('json', {'msg':msg, 'id':id, 'status':'error'}), mimetype="text/plain")
     
     # Don't exclude outgoing messages that are a response to another,
     # because they will be shown threaded beneath the original message
