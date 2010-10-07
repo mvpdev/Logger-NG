@@ -30,7 +30,9 @@ table.msgs {
     table.msgs div.status.good {
       background-position: 0 54px; }
     table.msgs div.status.pending {
-      background-position: 0 0; }
+	  background-repeat: no-repeat;
+	background-position: center;
+      background-image:url('../icons/pending.gif'); }
     table.msgs div.status.warning {
       background-position: 0 18px; }
     table.msgs div.status.info {
