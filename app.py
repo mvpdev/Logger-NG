@@ -32,7 +32,7 @@ Conflicts:
     logger app
 
 Dependencies:
-    direct_sms
+    direct_sms and others
 '''
 
 import rapidsms
