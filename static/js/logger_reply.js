@@ -5,6 +5,8 @@
 
 (function($){
 	var wrap, SmsExchange,
+		Messages,
+		maxId = 0,
 		exchangeVersion = "0.1";
 	
 	$.fn.enableSmsExchangeIn = function(_wrap){
@@ -39,17 +41,26 @@
 			exchangeWrap = twrap;
 		}
 		
-		function exchange(opts) {
+		function exchange(opts, placement) {
 			if(!exchangeWrap) {throw("Wrap element must be defined");}
-			this.id			=	opts.id;
+			this.id			=	opts.id.match(/\d+/)[0];
+			if(parseInt(this.id)>maxId) {maxId=this.id}
 			this.status		=	opts.status;
 			this.details	=	opts.details;
 			this.message	=	opts.message;
-			this.responses	=	opts.responses;
+			this.responses	=	opts.responses instanceof Array ? opts.responses : [];
 			this.name		=	opts.name;
 			this.dateStr	=	opts.dateStr;
 			this.respMessage=	"";
-			exchangeWrap.append(this.createTr());
+			if(placement=="prepend") {
+//				exchangeWrap.find('tr').get(-1).smsExchange.remove();
+				this.createTr();
+				this.tr.css({'display':'none'});
+				exchangeWrap.prepend(this.tr);
+				this.tr.fadeIn();
+			} else {
+				exchangeWrap.append(this.createTr());
+			}
 		}
 
 		//UI specific messages
@@ -69,6 +80,7 @@
 			$(this.tr).find('div.status').get(0).className="status "+str;
 			$(this.tr).find('div.status').get(0).title = this.msgs().status[str];
 		}
+		exchange.prototype.remove = function(){this.tr.fadeOut();}
 		exchange.prototype.submitMessage = function(obj){
 			var _exch = this;
 			$.post('sample_json/sms_received.json', obj, function(data){
@@ -262,7 +274,22 @@
 		return {
 			fromHTML: importHTML,
 			fromJSON: importJSON,
-			placeIn: setWrapElement
+			placeIn: setWrapElement,
+			constructor: exchange
 		}
 	})();
+	var reqUrl, freq = 4 * (1000 * 60);
+	$.listenForMessages = function(url, frequency) {
+		reqUrl = url;
+		freq = (frequency < 1000) ? (frequency*1000) : frequency;
+		window.setTimeout(checkForMessages, freq);
+	}
+	function checkForMessages() {
+		$.getJSON(reqUrl, "id="+maxId, function(results){
+			$(results).each(function(){
+				var nm = new SmsExchange.constructor(this, "prepend");
+			});
+		});
+		window.setTimeout(checkForMessages, freq);
+	}
 })(jQuery)
