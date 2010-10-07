@@ -85,7 +85,7 @@
 		var tableWrap = $("<table class='msgs'></table>");
 		
 		//creates exchange object and inserts it into tableWrap
-		$('.lng_msg').enableSmsExchangeIn(tableWrap);
+		$('.lng_msg').enableSmsExchangeIn(tableWrap, ExchangeSettings);
 		
 		//inserts tableWrap just before the first '.lng_msg'
 		$($('.lng_msg').get(0)).before(tableWrap);
