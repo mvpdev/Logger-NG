@@ -40,7 +40,7 @@
 	var CurrentLang = (window.navigator.language.toLowerCase()=="en-us") ? "en" : "fr",
 		ExchangeSettings = {
 		'token' : "qwertyuiopasdfghjklzxcvbnm",
-		'msgPOSTurl' : "logger_ng/proxypost"
+		'msgPOSTurl' : "/logger_ng/post_message"
 		},
 		Translations;
 
@@ -88,6 +88,9 @@
 		
 		//inserts tableWrap just before the first '.lng_msg'
 		$($('.lng_msg').get(0)).before(tableWrap);
+		
+		//updates list every 5 minutes, must be called after table is populated
+		$.listenForMessages("/logger_ng/latest_messages/", 5 * (1000*60)); 
 	})();
 </script>
 <table class="lng_page">

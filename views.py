@@ -76,3 +76,16 @@ def index(request):
     ctx = locals()
     ctx['request'] = request
     return render_to_response(request, "logger_ng/index.html", ctx)
+
+
+@permission_required('logger_ng.can_view')
+def post_message(request):
+    if request.method == 'POST' and \
+       request.user.has_perm('logger_ng.can_respond'):
+        return HttpResponse('{"status":"good"}', mimetype="text/json")
+
+@permission_required('logger_ng.can_view')
+def latest_messages(request, recent_id):
+    return HttpResponse('[]', mimetype="text/plain")
+
+ #   return HttpResponse('[{ "dateStr": "05-Oct-2010 @ 16:10:18", "id": "respond_%(#)", "message" : "Sample message from server.", "name" : "Alex", "responses" : [ "This message was never received because it is a test message"  ], "status" : "good" }]' % recent_id, mimetype="text/plain")
