@@ -239,7 +239,9 @@
 
 			this.tr.after(this.responseRow);
 			this.tr.addClass('hidden-open');
-			this.responseRow.find('div.slidedown').slideDown(100);
+			this.responseRow.find('div.slidedown').slideDown(100, function(){
+				$(this).find('input[type=text]').focus()
+			});
 		}
 		exchange.prototype.clickOpen = function() {
 			var focused = ($('table.msgs').find('.hidden-open').length > 0);
