@@ -23,7 +23,9 @@
 	   -*   You can also use json
 	   -*/
 		var exchangeWrap,
-			unfocusMessageTable;
+			unfocusMessageTable,
+			charLimit = 160,
+			specialCharacters = new RegExp("[áäâàåéëêèíïîìóöôõòúüûùçñ]", "gi");
 
 		function setWrapElement(elm) {
 			var table = ($(elm).get(0).nodeName.toLowerCase()=="table") ?
@@ -168,9 +170,8 @@
 			}
 
 			textArea.keyup(function(evt){
-				var num = 160,
-					remaining, chars, submitButton;
-				remaining = num-($(this).val().length);
+				var remaining, chars, submitButton;
+				remaining = charLimit - smsCharCount($(this).val());
 				chars = $(this).closest('table').find('.chars');
 				submitButton = $(this).closest('table').find('a.send')
 				chars.text(remaining);
@@ -251,7 +252,10 @@
 				this.populateTrAndOpen();
 			}
 		}
-
+		function smsCharCount(str) {
+			var tempStr = String(str);
+			return tempStr.length + (tempStr.match(specialCharacters) && tempStr.match(specialCharacters).length);
+		}
 		/*! importHTML will have to be updated whenever html input changes
 		-*    this function essentially extracts the important information from the html element and
 		-*    creates a new exchange with the JS object
