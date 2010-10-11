@@ -24,8 +24,7 @@
 	   -*/
 		var exchangeWrap,
 			unfocusMessageTable,
-			charLimit = 160,
-			specialCharacters = new RegExp("[áäâàåéëêèíïîìóöôõòúüûùçñ]", "gi");
+			charLimit = 160;
 
 		function setWrapElement(elm) {
 			var table = ($(elm).get(0).nodeName.toLowerCase()=="table") ?
@@ -253,9 +252,17 @@
 			}
 		}
 		function smsCharCount(str) {
-			var tempStr = String(str);
-			return tempStr.length + (tempStr.match(specialCharacters) && tempStr.match(specialCharacters).length);
+			var tempStr = String(str),
+				count = 0,
+				i = 0,
+				unicodeCharCount = "\\u1234".length,
+				letter;
+			for(i;i<str.length;i++) {
+				count += str[i].charCodeAt(0)<122 ? 1 : unicodeCharCount
+			}
+			return count;
 		}
+
 		/*! importHTML will have to be updated whenever html input changes
 		-*    this function essentially extracts the important information from the html element and
 		-*    creates a new exchange with the JS object
