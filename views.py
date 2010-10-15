@@ -18,6 +18,10 @@ from rapidsms.webui.utils import render_to_response
 from logger_ng.models import LoggedMessage
 from logger_ng.utils import respond_to_msg
 
+from django.core import serializers
+
+
+
 
 @login_required
 @permission_required('logger_ng.can_view')
@@ -37,8 +41,9 @@ def index(request):
             if match and len(value) > 1:
                 pk = match.groupdict()['id']
                 msg = get_object_or_404(LoggedMessage, pk=pk)
-                return HttpResponse(serializers.serialize('json', {'msg':msg, 'id':id, 'status':'good'}), mimetype="text/plain")
-        return HttpResponse(serializers.serialize('json', {'msg':msg, 'id':id, 'status':'error'}), mimetype="text/plain")
+                respond_to_msg(msg, value)
+
+        return redirect(index)
     
     # Don't exclude outgoing messages that are a response to another,
     # because they will be shown threaded beneath the original message
@@ -82,10 +87,29 @@ def index(request):
 def post_message(request):
     if request.method == 'POST' and \
        request.user.has_perm('logger_ng.can_respond'):
+        pk = int(request.POST['id'])
+        msg = get_object_or_404(LoggedMessage, pk=pk)
+        value = request.POST['msg']
+        respond_to_msg(msg, value)
         return HttpResponse('{"status":"good"}', mimetype="text/json")
 
-@permission_required('logger_ng.can_view')
-def latest_messages(request, recent_id):
-    return HttpResponse('[]', mimetype="text/plain")
 
- #   return HttpResponse('[{ "dateStr": "05-Oct-2010 @ 16:10:18", "id": "respond_%(#)", "message" : "Sample message from server.", "name" : "Alex", "responses" : [ "This message was never received because it is a test message"  ], "status" : "good" }]' % recent_id, mimetype="text/plain")
+# I started to auto-pull the latest message via ajax. it's ready in JS, but the back end needs some work
+    #@permission_required('logger_ng.can_view')
+    #def latest_messages(request, recent_id):
+    #    latest_message_id = int(request.GET['id'])
+    #    msgs = LoggedMessage.objects.filter(id__gt=latest_message_id)
+    # message_json should look like this:
+    #  [{
+    #    "id": 999,
+    #    "status": "good",
+    #    "message": "message",
+    #    "responses": [
+    #        {
+    #            "msg": "Response message" 
+    #        } 
+    #    ],
+    #    "name": "name",
+    #    "dateStr": "date string"
+    #  }]
+    #    return HttpResponse('[]', mimetype="text/plain")
