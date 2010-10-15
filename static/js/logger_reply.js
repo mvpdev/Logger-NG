@@ -132,7 +132,7 @@
 					["input", {'type':'hidden','name':'sms_id','value':this.id}]
 				],
 				["table", {},["tbody", {},["tr", {},
-							["td", {'rowspan':2}, ["textarea", {'name':'message', 'cols':60, 'rows':2}]],
+							["td", {'rowspan':2}, ["textarea", {'name':'message', 'cols':60, 'rows':2}, this.respMessage]],
 							["td", {}, ["a",{'class':'send','href':'#'}, this.msgs().sendMessage]]
 				],
 				["tr", {}, 
