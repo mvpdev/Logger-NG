@@ -44,7 +44,7 @@
             {% if msg.text %}{{ msg.text }}{% else %}[Empty message]{% endif %}
         </div>
         
-        {% for response in msg.response.all %}
+        {% for response in msg.response.all.reverse %}
             <div class="msg response">
             <span class="date">{{ response.date|humanize_time_delta }}:</span>
             {% if response.text %}{{ response.text }}{% else %}[Empty message]{% endif %}
