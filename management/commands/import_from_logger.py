@@ -48,9 +48,9 @@ def create_from_logger_msg(msg):
     msg_lng = LoggedMessage(identity=msg.identity, backend=msg.backend,
                             text=msg.text, reporter=reporter,
                             direction=direction)
-    msg_lng.save()
+#    msg_lng.save()
     msg_lng.date = msg.date
-    msg_lng.save()
+#    msg_lng.save()
     return msg_lng
 
 
