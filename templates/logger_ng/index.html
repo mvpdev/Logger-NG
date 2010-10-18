@@ -25,7 +25,7 @@
 		<span class="status" title="{{'good'}}"></span>
     </div>
     <div class="msg {% if msg.is_incoming %}text{% else %}response{% endif %}">{{msg.text}}</div>
-    {% for response in msg.response.all %}
+    {% for response in msg.response.all.reverse %}
         <div class="msg response">{{response.text}}</div>
     {% endfor %}
     {% if perms.logger_ng.respond and msg.is_incoming %}
