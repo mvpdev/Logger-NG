@@ -11,6 +11,7 @@ import logger_ng.views as views
 
 urlpatterns = patterns('',
     url(r'^logger_ng/$', views.index, name='logger_ng'),
+    url(r'^logger_ng/post_message/?$', views.post_message),
 )
 
 

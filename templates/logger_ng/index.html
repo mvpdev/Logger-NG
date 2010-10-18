@@ -12,8 +12,14 @@
 
 {% block stylesheets %}
     {{ block.super }}
+	<script type="text/javascript" src="{{ MEDIA_URL }}logger_ng/js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}logger_ng/js/jquery.buildin.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}logger_ng/js/logger_reply.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}logger_ng/js/jquery.buildin.templates.js"></script>
+
     <link rel="stylesheet" href="{{ MEDIA_URL }}logger_ng/stylesheets/blueprint/screen.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}logger_ng/stylesheets/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}logger_ng/stylesheets/sms-replies.css" />
 {% endblock %}
 
 {% block content %}
@@ -25,13 +31,14 @@
         <input id="logger_ng_search_box" name="logger_ng_search_box" type="text" value="{{ request.GET.logger_ng_search_box }}" />
         <input type="submit" value="{% trans 'Filter messages' %}" />
     </form>
-    
+<ul>
     {% for msg in msgs.object_list %}
-
+    <li class='exchange'>
         <div class="details">
             <span class="date">{{ msg.date|humanize_time_delta }}</span>, 
             {% if msg.is_incoming %} {% trans "from" %} {% else %} {% trans "to" %} {% endif %} 
             <span class="from">{{ msg.ident_string }}</span>
+			<span class="status" title="good" />
         </div>
         <div class="msg {% if msg.is_incoming %}text{% else %}response{% endif %}">
             {% if msg.text %}{{ msg.text }}{% else %}[Empty message]{% endif %}
@@ -54,8 +61,9 @@
         
     {% empty %}
         <p>{% trans "No message found" %}<p>    
+	</li>
     {% endfor %}
-
+</ul>
 </div>
 
 <div class="lng_page span-18 last prepend-2">
@@ -73,5 +81,63 @@
         {% endif %}
 </span>
 </div>
+
+<script type="text/javascript">
+	var CurrentLang = (window.navigator.language.toLowerCase()=="en-us") ? "en" : "fr",
+		ExchangeSettings = {
+		'token' : "qwertyuiopasdfghjklzxcvbnm",
+		'msgPOSTurl' : "/messagelog/logger_ng/post_message"
+		},
+		Translations;
+
+	// window.navigator.language is not reliable in all browsers, but
+	// might be good for surprising kevin+renaud with a french ui
+	CurrentLang = (window.navigator.language.toLowerCase()=="en-us") ? "en" : "fr";
+	
+	Translations = {
+		'en': {
+			'response': "Response",
+			'responses': "Responses",
+			'reply': 'Respond',
+			'status': {
+				'good': "Status: Good",
+				'warning': "Status: Warning",
+				'pending': "Status: Pending",
+				'error': "Status: Error",
+				'info': "Status: Info"
+			},
+			'sendMessage': "Send",
+			'tooManyCharacters': "Too many characters"
+		},
+		'fr': {
+			'response': "Réponse",
+			'responses': "Réponses",
+			'reply': "Répondre",
+			'status': {
+				'good': "Statut: Bon",
+				'pending': "Statut: Pending",
+				'warning': "Statut: Warning",
+				'error': "Statut: Error",
+				'info' : "Statut: Info"
+			},
+			'sendMessage': "Envoyer",
+			'tooManyCharacters': "Too many characters (in French)"
+		}
+	};
+	
+	(function(){
+		//creates the wrapping table with class msgs
+		var tableWrap = $("<table class='msgs'></table>");
+		
+		//creates exchange object and inserts it into tableWrap
+		$('.lng_msg li.exchange').enableSmsExchangeIn(tableWrap, ExchangeSettings);
+		
+		//inserts tableWrap just before the first '.lng_msg'
+		$($('.lng_msg').get(0)).before(tableWrap);
+		
+		//updates list every 5 minutes, must be called after table is populated
+//		$.listenForMessages("/logger_ng/latest_messages/", 5 * (1000*60)); 
+	})();
+</script>
 
 {% endblock %}

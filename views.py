@@ -12,8 +12,11 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.csrf.middleware import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
+
+from django.http import HttpResponse
 
 from logger_ng.models import LoggedMessage
 from logger_ng.utils import respond_to_msg
@@ -76,3 +79,14 @@ def index(request, template='logger_ng/index.html'):
     ctx = locals()
     return render_to_response(template, ctx,
                               context_instance=RequestContext(request))
+
+@permission_required('logger_ng.can_respond')
+@csrf_exempt
+def post_message(request):
+    if request.method == 'POST' and \
+       request.user.has_perm('logger_ng.can_respond'):
+        pk = int(request.POST['id'])
+        msg = get_object_or_404(LoggedMessage, pk=pk)
+        value = request.POST['msg']
+        respond_to_msg(msg, value)
+        return HttpResponse('{"status":"good"}', mimetype="text/json")
